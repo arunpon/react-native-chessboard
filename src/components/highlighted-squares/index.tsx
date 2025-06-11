@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
+import type { Square } from 'chess.js';
 
 import { useChessboardProps } from '../../context/props-context/hooks';
 
@@ -12,7 +13,7 @@ const HighlightedSquares: React.FC = React.memo(() => {
   const chess = useChessEngine();
   const board = useMemo(() => chess.board(), [chess]);
   const { pieceSize } = useChessboardProps();
-  const { toPosition, toTranslation } = useReversePiecePosition();
+  const { toTranslation } = useReversePiecePosition();
   const refs = useSquareRefs();
 
   return (
@@ -23,7 +24,11 @@ const HighlightedSquares: React.FC = React.memo(() => {
     >
       {board.map((row, y) =>
         row.map((_, x) => {
-          const square = toPosition({ x: x * pieceSize, y: y * pieceSize });
+          const square = ((): Square => {
+            const col = String.fromCharCode(97 + x);
+            const rowIndex = 8 - y;
+            return `${col}${rowIndex}` as Square;
+          })();
           const translation = toTranslation(square);
 
           return (

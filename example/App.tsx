@@ -23,6 +23,7 @@ export default function App() {
       <StatusBar style="auto" />
       <Chessboard
         ref={ref}
+        orientation="b"
         onMove={({ state }) => {
           if (state.in_checkmate) {
             console.log('Life goes on.');

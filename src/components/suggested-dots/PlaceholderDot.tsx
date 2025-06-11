@@ -21,9 +21,13 @@ type PlaceholderDotProps = {
 const PlaceholderDot: React.FC<PlaceholderDotProps> = React.memo(
   ({ x, y, selectableSquares, moveTo }) => {
     const { pieceSize } = useChessboardProps();
-    const { toPosition, toTranslation } = useReversePiecePosition();
+    const { toTranslation } = useReversePiecePosition();
 
-    const currentSquare = toPosition({ x: x * pieceSize, y: y * pieceSize });
+    const currentSquare = ((): Square => {
+      const col = String.fromCharCode(97 + x);
+      const rowIndex = 8 - y;
+      return `${col}${rowIndex}` as Square;
+    })();
     const translation = useMemo(
       () => toTranslation(currentSquare),
       [currentSquare, toTranslation]

@@ -29,7 +29,7 @@ interface SquareProps extends RowProps {
 
 const Square = React.memo(
   ({ white, row, col, letters, numbers }: SquareProps) => {
-    const { colors } = useChessboardProps();
+    const { colors, orientation } = useChessboardProps();
     const backgroundColor = white ? colors.black : colors.white;
     const color = white ? colors.white : colors.black;
     const textStyle = { fontWeight: '500' as const, fontSize: 10, color };
@@ -45,12 +45,14 @@ const Square = React.memo(
       >
         {numbers && (
           <Text style={[textStyle, { opacity: newLocal ? 1 : 0 }]}>
-            {'' + (8 - row)}
+            {orientation === 'w' ? 8 - row : row + 1}
           </Text>
         )}
-        {row === 7 && letters && (
-          <Text style={[textStyle, { alignSelf: 'flex-end' }]}>
-            {String.fromCharCode(97 + col)}
+        {(orientation === 'w' ? row === 7 : row === 0) && letters && (
+          <Text style={[textStyle, { alignSelf: 'flex-end' }]}> 
+            {orientation === 'w'
+              ? String.fromCharCode(97 + col)
+              : String.fromCharCode(97 + (7 - col))}
           </Text>
         )}
       </View>
