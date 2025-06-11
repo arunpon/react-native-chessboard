@@ -62,13 +62,19 @@ type ChessboardProps = {
    * Useful if you want to customise the default durations used in the chessboard (in milliseconds).
    */
   durations?: ChessboardDurationsType;
+  /**
+   * Defines which side should be at the bottom of the board.
+   * Possible values are 'w' (white) or 'b' (black).
+   * By default it will follow the turn from the provided fen string.
+   */
+  orientation?: 'w' | 'b';
 };
 
 type ChessboardContextType = ChessboardProps &
   Required<
     Pick<
       ChessboardProps,
-      'gestureEnabled' | 'withLetters' | 'withNumbers' | 'boardSize'
+      'gestureEnabled' | 'withLetters' | 'withNumbers' | 'boardSize' | 'orientation'
     >
   > & { pieceSize: number } & {
     colors: Required<ChessboardColorsType>;
@@ -94,6 +100,7 @@ const defaultChessboardProps: ChessboardContextType = {
   withNumbers: true,
   boardSize: DEFAULT_BOARD_SIZE,
   pieceSize: DEFAULT_BOARD_SIZE / 8,
+  orientation: 'w',
 };
 
 const ChessboardPropsContext = React.createContext<ChessboardContextType>(
@@ -103,9 +110,12 @@ const ChessboardPropsContext = React.createContext<ChessboardContextType>(
 const ChessboardPropsContextProvider: React.FC<ChessboardProps> = React.memo(
   ({ children, ...rest }) => {
     const value = useMemo(() => {
+      const orientationFromFen =
+        rest.fen?.split(' ')[1] === 'b' ? 'b' : 'w';
       const data = {
         ...defaultChessboardProps,
         ...rest,
+        orientation: rest.orientation ?? orientationFromFen,
         colors: { ...defaultChessboardProps.colors, ...rest.colors },
         durations: { ...defaultChessboardProps.durations, ...rest.durations },
       };

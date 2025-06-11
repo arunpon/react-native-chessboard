@@ -91,6 +91,15 @@ Default: `Math.floor(SCREEN_WIDTH / 8) * 8`
 
 ---
 
+### `orientation?: 'w' | 'b'`
+
+Sets which side should be displayed at the bottom of the board. `'w'` keeps the
+white pieces at the bottom while `'b'` flips the board so the black pieces are
+at the bottom. If omitted, the orientation follows the turn information from the
+`fen` string.
+
+---
+
 ### `renderPiece?: (piece: PieceType) => React.ReactElement | null`
 
 It gives the possibility to customise the chessboard pieces.
